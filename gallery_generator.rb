@@ -34,6 +34,29 @@ module Jekyll
     end
   end
 
+  class GalleryImage
+    attr_accessor :filename
+    
+    def initialize(filename)
+      @filename = filename
+    end
+    
+    def title
+      File.basename( self.filename, ".*" )    
+    end
+        
+    def comment
+    end
+    
+    def to_liquid
+      {
+       'filename'=>self.filename,
+       'title' => self.title,
+       'comment' => self.comment
+      }
+    end    
+  end
+
   class GalleryPage < Page
     def initialize(site, base, dir, gallery_name)
       @site = site
@@ -67,7 +90,9 @@ module Jekyll
       FileUtils.mkdir_p(thumbs_dir, :mode => 0755)
       Dir.foreach(dir) do |image|
         if image.chars.first != "." and image.downcase().end_with?(*$image_extensions)
-          @images.push(image)
+          i = GalleryImage.new(image)
+          
+          @images.push(i)
           best_image = image
           @site.static_files << GalleryFile.new(site, base, "#{@dest_dir}/thumbs/", image)
           if File.file?("#{thumbs_dir}/#{image}") == false or File.mtime("#{dir}/#{image}") > File.mtime("#{thumbs_dir}/#{image}")
@@ -94,6 +119,14 @@ module Jekyll
         self.data["date_time"] = EXIFR::JPEG.new("#{dir}/#{best_image}").date_time.to_i
       rescue
       end
+      
+      if File.file?("#{dir}/description.md")
+        contents = File.read("#{dir}/description.md")
+        converter = Jekyll::Converters::Markdown::RedcarpetParser.new(site.config)
+        d = converter.convert(contents)
+        self.data["description"] = d
+      end
+      
     end
   end
 

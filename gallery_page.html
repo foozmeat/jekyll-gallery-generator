@@ -1,31 +1,26 @@
 ---
-layout: page
+layout: default
+gallery: true
 ---
-<style TYPE="text/css">
-.gallery-image-wrapper {
-  height: 300px;
-  width: 300px;
-  display: inline-block;
-  margin: 1em;
-  position: relative;
-  text-align: center;
-}
-.gallery-image {
-  margin: auto;
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  max-height: 100%;
-  max-width: 100%;
-}
-</style>
-<h1><a href="/{{ site.gallery.dir }}">{{ page.title }}</a></h1>
-<hr />
+<div class="page-header">
+  <h3><a href="/{{ site.gallery.dir }}">{{ page.title }}</a></h3>
+  {% if page.description %}
+  <p>{{ page.description }}</p>
+  {% endif %}
+</div>
+
+<div class="row" id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery" data-selector="a.gallery-item">
+<div class="thumbnails">
 {% for image in page.images %}
-    <div class="gallery-image-wrapper">
-        <a name="{{ image }}"></a>
-        <a href="{{ image }}"{% if site.gallery.lightbox %} rel="lightbox[{{ page.gallery }}]"{% endif %}>
-            <img class="gallery-image" src="thumbs/{{ image }}" />
-        </a>
+    <div class="col-sm-6 col-md-3">
+      <a href="{{ image.filename }}" title="{{ image.title }}" class="">
+	      <img class="img-thumbnail img-responsive" style="width: 200px; height: 200px;"  alt="{{ image.title }}" src="thumbs/{{ image.filename | uri_escape}}" />
+      </a>
+      <div class="caption">
+        <strong>{{ image.title }}</strong>
+        <p>{{ image.comment }}</p>
+      </div>
     </div>
 {% endfor %}
+</div>
+</div>

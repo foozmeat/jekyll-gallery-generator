@@ -1,12 +1,22 @@
 ---
-layout: page
+layout: default
 ---
+
+<div class="row">
+<div class="thumbnails">
+
 {% for gallery in page.galleries %}
-<div style="width: 35em; text-align: center; padding: 1em 0 4em 0;">
-    <a href="{{ gallery['gallery'] }}">
-        <img style="max-height: 20em; max-width: 20em;" src="{{ gallery['gallery'] }}/thumbs/{{ gallery['best_image'] }}">
-    </a>
-    <h3><a href="{{ gallery['gallery'] }}">{{ gallery["name"] }}</a></h3>
-    {{ gallery["images"] | size }} images
+<div class="col-sm-6 col-md-3">
+
+  <a href="{{ gallery['gallery'] }}">
+      <img class="img-thumbnail img-responsive" style="width: 200px; height: 200px;" src="{{ gallery['gallery'] }}/thumbs/{{ gallery['best_image'] }}">
+  </a>
+  <div class="caption">
+    <strong><a href="{{ gallery['gallery'] }}">{{ gallery["name"] }}</a></strong>
+    <p>{{ gallery["images"] | size }} images</p>
+  </div>
+
 </div>
 {% endfor %}
+</div>
+</div>
